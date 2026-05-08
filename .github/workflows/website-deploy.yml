@@ -26,3 +26,4 @@ jobs:
             - name: deploy website
               run: |
                 scp -i ~/.ssh/mein_schlüssel index.html ubuntu@${{secrets.EC2_IP}}:/home/ubuntu/index.html
+                ssh -i ~/.ssh/mein_schlüssel ubuntu@${{secrets.EC2_IP}} "sudo cp /home/ubuntu/index.html /var/www/html/index.html"
