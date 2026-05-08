@@ -1,6 +1,6 @@
 name: mein erster workflow
 
-on: push
+on: workflow_dispatch # manuell auslösen
 
 jobs:
     hello_world_job:

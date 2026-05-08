@@ -1,0 +1,19 @@
+name: Deploy-Website-Worklfow
+
+on: push
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            
+            - name: ssh setup
+              run: |
+                mkdir -p ~/.ssh
+                echo "${{secrets.SSH_PRIVATE_KEY}}" > ~/.ssh/mein_schlüssel
+                chmod 400 ~/.ssh/mein_schlüssel
+                ssh-keyscan -H ${{secrets.SSH_PRIVATE_KEY}} >> ~/.ssh/known_hosts
+
+            - name: test step
+              run: ssh -i ~/.ssh/mein_schlüssel ubuntu@${{secrets.EC2_IP}} "mkdir testordner"    
+
