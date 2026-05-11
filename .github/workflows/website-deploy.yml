@@ -1,6 +1,6 @@
 name: Deploy-Website-Worklfow
 
-on: push
+on: workflow_dispatch
 
 jobs:
     deploy:
