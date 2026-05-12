@@ -27,3 +27,14 @@ jobs:
         steps:
             - name: checkout
               uses: actions/checkout@v6
+
+            - name: ssh setup
+              run: |
+                mkdir -p ~/.ssh
+                echo "${{secrets.SSH_PRIVATE_KEY}}" > ~/.ssh/mein_schlüssel
+                chmod 400 ~/.ssh/mein_schlüssel
+                ssh-keyscan -H ${{secrets.EC2_IP}} >> ~/.ssh/known_hosts
+
+            - name: copy math.js
+              run: |
+                scp -i ~/.ssh/mein_schlüssel testing-example/math.js ubuntu@${{secrets.EC2_IP}}:/home/ubuntu/math.js
