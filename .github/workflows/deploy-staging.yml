@@ -30,3 +30,12 @@ jobs:
               run: |
                 scp -i ~/.ssh/mein_schlüssel frontend/index.html ubuntu@${{secrets.EC2_IP}}:/home/ubuntu/index.html
                 ssh -i ~/.ssh/mein_schlüssel ubuntu@${{secrets.EC2_IP}} "sudo cp /home/ubuntu/index.html /var/www/html/index.html"
+
+            - name: Post a message in a channel
+              uses: slackapi/slack-github-action@v3.0.3
+              with:
+                webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+                webhook-type: incoming-webhook
+                payload: |
+                  text: "Hallo ich komme aus dem deploy-staging.yml"
+            
