@@ -40,11 +40,21 @@ jobs:
                 scp -i ~/.ssh/mein_schlüssel frontend/index.html ubuntu@${{secrets.EC2_IP}}:/home/ubuntu/index.html
                 ssh -i ~/.ssh/mein_schlüssel ubuntu@${{secrets.EC2_IP}} "sudo cp /home/ubuntu/index.html /var/www/html/index.html"
 
-            - name: Post a message in a channel
+            - name: Post a message in a channel bei Erfolg!
+              if: ${{ success() }}
               uses: slackapi/slack-github-action@v3.0.3
               with:
                 webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
                 webhook-type: incoming-webhook
                 payload: |
                   text: "✅ Staging Deployment erfolgreich !"       
+
+            - name: Post a message in a channel bei Fehlschlag!
+              if: ${{ failure() }}
+              uses: slackapi/slack-github-action@v3.0.3
+              with:
+                webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+                webhook-type: incoming-webhook
+                payload: |
+                  text: "❌ Staging Deployment nicht erfolgreich !!!"
             

@@ -45,10 +45,20 @@ jobs:
                 ssh -i ~/.ssh/mein_schlüssel ubuntu@$ip "sudo cp /home/ubuntu/index.html /var/www/html/index.html"
                 done
 
-            - name: Post a message in a channel
+            - name: Post a message in a channel bei Erfolg
+              if: ${{ success() }}
               uses: slackapi/slack-github-action@v3.0.3
               with:
                 webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
                 webhook-type: incoming-webhook
                 payload: |
                   text: "✅ Prod Deployment erfolgreich !"     
+
+            - name: Post a message in a channel bei Fehlschlag
+              if: ${{ failure() }}
+              uses: slackapi/slack-github-action@v3.0.3
+              with:
+                webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+                webhook-type: incoming-webhook
+                payload: |
+                  text: "❌ Prod Deployment nicht erfolgreich !!!"   
